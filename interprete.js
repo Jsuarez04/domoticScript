@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+
 class DomoticInterpreter {
   constructor() {
     // Simulación del estado de los sensores y dispositivos (Memoria)
@@ -79,69 +83,18 @@ class DomoticInterpreter {
   }
 }
 
-const miCodigo = `
-PROGRAMA
-ACTIVAR LUCES_SALA
-// Simulamos que detectamos movimiento (0 = no hay nadie)
-SI (LEER_SENSOR(MOVIMIENTO_SALA) == 0) ENTONCES DESACTIVAR LUCES_SALA
-SI (LEER_SENSOR(TEMP_SERVER) > 25) ENTONCES ACTIVAR VENTILADOR_EMERGENCIA
-FIN_PROGRAMA
-`
+const interprete = new DomoticInterpreter();
+const filePath = process.argv[2];
 
-const codigoIncendio = `
-PROGRAMA
-// --- PROTOCOLO DE INCENDIO ---
+if (!filePath) {
+  console.log('Por favor, proporciona la ruta del archivo a ejecutar.');
+  process.exit(1);
+}
 
-// Si detecta humo (1 = Si), activa los rociadores de agua
-SI (LEER_SENSOR(SENSOR_HUMO) == 1) ENTONCES ACTIVAR ROCIADORES_TECHO
-
-// Si hay fuego, apaga el aire para no avivar las llamas
-SI (LEER_SENSOR(SENSOR_HUMO) == 1) ENTONCES DESACTIVAR AIRE_CENTRAL
-
-// Desbloquea las puertas para evacuación
-SI (LEER_SENSOR(TEMPERATURA_SALA) > 45) ENTONCES ACTIVAR DESBLOQUEO_PUERTAS
-
-ACTIVAR ALARMA_SONORA
-FIN_PROGRAMA
-`
-
-const codigoTanques = `
-PROGRAMA
-// --- CONTROL DE BOMBAS DE AGUA ---
-
-// Si el tanque principal está casi vacío (menos de 10 litros), llenar
-SI (LEER_SENSOR(NIVEL_TANQUE_1) < 10) ENTONCES ACTIVAR BOMBA_PRINCIPAL
-
-// Protección: Si el motor se calienta demasiado, apagarlo inmediatamente
-SI (LEER_SENSOR(TEMP_MOTOR) > 90) ENTONCES DESACTIVAR BOMBA_PRINCIPAL
-
-// Si hay presión en la tubería, abrir la válvula de paso
-SI (LEER_SENSOR(PRESION_AGUA) > 50) ENTONCES ACTIVAR VALVULA_SALIDA
-
-FIN_PROGRAMA
-`
-
-const codigoOficina = `
-PROGRAMA
-// --- RUTINA DE CONFORT MATUTINO ---
-
-// Ajustar clima a 22 grados
-AJUSTAR TERMOSTATO 22
-
-// Abrir persianas
-ACTIVAR PERSIANAS_ELECTRICAS
-
-// Si hay mucha luz solar afuera, apagar luces internas para ahorrar
-SI (LEER_SENSOR(LUMENES_SOL) > 800) ENTONCES DESACTIVAR LUCES_TECHO
-
-// Preparar cafetera
-ACTIVAR MAQUINA_CAFE
-FIN_PROGRAMA
-`
-
-const interprete = new DomoticInterpreter()
-
-interprete.ejecutar(codigoIncendio)
-interprete.ejecutar(codigoTanques)
-interprete.ejecutar(codigoOficina)
-interprete.ejecutar(miCodigo)
+fs.readFile(filePath, 'utf8', (err, data) => {
+  if (err) {
+    console.error(`Error al leer el archivo: ${err}`);
+    process.exit(1);
+  }
+  interprete.ejecutar(data);
+});

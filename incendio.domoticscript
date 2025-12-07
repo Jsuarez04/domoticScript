@@ -1,0 +1,15 @@
+
+PROGRAMA
+// --- PROTOCOLO DE INCENDIO ---
+
+// Si detecta humo (1 = Si), activa los rociadores de agua
+SI (LEER_SENSOR(SENSOR_HUMO) == 1) ENTONCES ACTIVAR ROCIADORES_TECHO
+
+// Si hay fuego, apaga el aire para no avivar las llamas
+SI (LEER_SENSOR(SENSOR_HUMO) == 1) ENTONCES DESACTIVAR AIRE_CENTRAL
+
+// Desbloquea las puertas para evacuación
+SI (LEER_SENSOR(TEMPERATURA_SALA) > 45) ENTONCES ACTIVAR DESBLOQUEO_PUERTAS
+
+ACTIVAR ALARMA_SONORA
+FIN_PROGRAMA

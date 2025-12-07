@@ -1,0 +1,16 @@
+
+PROGRAMA
+// --- RUTINA DE CONFORT MATUTINO ---
+
+// Ajustar clima a 22 grados
+AJUSTAR TERMOSTATO 22
+
+// Abrir persianas
+ACTIVAR PERSIANAS_ELECTRICAS
+
+// Si hay mucha luz solar afuera, apagar luces internas para ahorrar
+SI (LEER_SENSOR(LUMENES_SOL) > 800) ENTONCES DESACTIVAR LUCES_TECHO
+
+// Preparar cafetera
+ACTIVAR MAQUINA_CAFE
+FIN_PROGRAMA

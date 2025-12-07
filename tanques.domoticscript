@@ -1,0 +1,14 @@
+
+PROGRAMA
+// --- CONTROL DE BOMBAS DE AGUA ---
+
+// Si el tanque principal está casi vacío (menos de 10 litros), llenar
+SI (LEER_SENSOR(NIVEL_TANQUE_1) < 10) ENTONCES ACTIVAR BOMBA_PRINCIPAL
+
+// Protección: Si el motor se calienta demasiado, apagarlo inmediatamente
+SI (LEER_SENSOR(TEMP_MOTOR) > 90) ENTONCES DESACTIVAR BOMBA_PRINCIPAL
+
+// Si hay presión en la tubería, abrir la válvula de paso
+SI (LEER_SENSOR(PRESION_AGUA) > 50) ENTONCES ACTIVAR VALVULA_SALIDA
+
+FIN_PROGRAMA
