@@ -1,0 +1,1 @@
+C:\Users\G-FIVE\OneDrive\Documentos\Lenguajes\ y\ Compiladores\montecarlo_rust\target\debug\montecarlo_rust.exe: C:\Users\G-FIVE\OneDrive\Documentos\Lenguajes\ y\ Compiladores\montecarlo_rust\src\main.rs
